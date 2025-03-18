@@ -3,7 +3,7 @@ import axios from "axios";
 import "./App.css"; // Add CSS for square boxes
 
 // Use Production API URL
-const API_BASE = "https://wordle-flask.onrender.com";
+const API_BASE = "https://wrdl.onrender.com";
 
 function App() {
   const [word, setWord] = useState("");
