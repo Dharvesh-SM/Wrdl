@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css"; // Add CSS for square boxes
 
+// Use Production API URL
+const API_BASE = "https://wordle-flask.onrender.com";
+
 function App() {
   const [word, setWord] = useState("");
   const [guess, setGuess] = useState("");
@@ -10,14 +13,15 @@ function App() {
   const [attempts, setAttempts] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
+  // Fetch the target word on page load
   useEffect(() => {
     getWord();
   }, []);
 
-  // Fetch the target word from Flask
+  // Get new word from Flask backend
   const getWord = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/word");
+      const response = await axios.get(`${API_BASE}/word`);
       setWord(response.data.word);
       resetGame();
     } catch (error) {
@@ -25,7 +29,7 @@ function App() {
     }
   };
 
-  // Reset the game state
+  // Reset the game
   const resetGame = () => {
     setMessage("Start guessing!");
     setGuesses([]);
@@ -34,12 +38,12 @@ function App() {
     setGuess("");
   };
 
-  // Check the guessed word and get hints
+  // Check the guessed word with hints
   const checkGuess = async () => {
     if (gameOver || guess.length !== word.length) return;
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/check", {
+      const response = await axios.post(`${API_BASE}/check`, {
         word: guess,
       });
 
@@ -69,10 +73,10 @@ function App() {
     }
   };
 
-  // Restart the game
+  // Restart the game by fetching a new word
   const restartGame = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/restart");
+      const response = await axios.get(`${API_BASE}/restart`);
       setWord(response.data.word);
       resetGame();
     } catch (error) {
@@ -85,7 +89,7 @@ function App() {
       <h1>Wordle Clone</h1>
       <p>{message}</p>
 
-      {/* Display all guesses with hints */}
+      {/* Show all guesses with hints */}
       <div className="grid">
         {guesses.map((entry, i) => (
           <div key={i} className="row">
@@ -106,7 +110,7 @@ function App() {
           </div>
         ))}
 
-        {/* Show empty rows if attempts < 6 */}
+        {/* Show empty rows for remaining attempts */}
         {[...Array(6 - guesses.length)].map((_, i) => (
           <div key={`empty-${i}`} className="row">
             {[...Array(word.length)].map((_, j) => (
@@ -121,7 +125,7 @@ function App() {
           <input
             type="text"
             value={guess}
-            onChange={(e) => setGuess(e.target.value)}
+            onChange={(e) => setGuess(e.target.value.toUpperCase())}
             maxLength={word.length}
             className="input-box"
           />
