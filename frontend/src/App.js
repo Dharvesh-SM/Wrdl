@@ -86,7 +86,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Wordle Clone</h1>
+      <h1>Wordle by Dhvsh</h1>
       <p>{message}</p>
 
       {/* Show all guesses with hints */}
