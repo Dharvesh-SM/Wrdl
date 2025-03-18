@@ -1,1 +1,1 @@
-# Wrdl
+# Wordle game using Flask and React
