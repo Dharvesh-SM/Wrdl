@@ -5,7 +5,7 @@ import random
 TARGET_WORD = None
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 WORDS = [
     "about", "above", "actor", "acute", "admit", "adult", "after", "again", "agent", "agree",
@@ -82,4 +82,4 @@ def restart_game():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
